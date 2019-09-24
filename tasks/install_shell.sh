@@ -84,6 +84,13 @@ if [ `id -u` -ne 0 ]; then
   echo "puppet_agent::install task must be run as root"
   exit 1
 fi
+#Add installdir parameter value 
+
+if [ -f "$PT_installdir" ]; then
+   install_dir=$PT_installdir
+else
+   installdir="/etc/puppetlabs/code/environments/production/modules"
+fi
 
 # Track to handle puppet5 to puppet6
 if [ -f /opt/puppetlabs/puppet/VERSION ]; then
@@ -94,10 +101,10 @@ fi
 
 # Retrieve Platform and Platform Version
 # Utilize facts implementation when available
-if [ -f "$PT__installdir/facts/tasks/bash.sh" ]; then
+if [ -f "$PT_installdir/facts/tasks/bash.sh" ]; then
   # Use facts module bash.sh implementation
-  platform=$(bash $PT__installdir/facts/tasks/bash.sh "platform")
-  platform_version=$(bash $PT__installdir/facts/tasks/bash.sh "release")
+  platform=$(bash $PT_installdir/facts/tasks/bash.sh "platform")
+  platform_version=$(bash $PT_installdir/facts/tasks/bash.sh "release")
 
   # Handle CentOS
   if test "x$platform" = "xCentOS"; then

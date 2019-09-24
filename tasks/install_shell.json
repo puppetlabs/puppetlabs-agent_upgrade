@@ -30,6 +30,10 @@
     "install_options": {
       "description": "optional install arguments to the windows installer (defaults to REINSTALLMODE=\"amus\")",
       "type": "Optional[String]"
+    },
+    "installdir": {
+      "description": "optional install arguments -  installer install directory ",
+      "type": "Optional[String]"
     }
   }
 }
