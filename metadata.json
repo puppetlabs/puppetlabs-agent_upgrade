@@ -53,6 +53,12 @@
       ]
     },
     {
+      "operatingsystem": "XCP-ng",
+      "operatingsystemrelease": [
+        "8",
+      ]
+    },
+    {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "5",
