@@ -7,7 +7,6 @@
 # Parameters:
 # - PLATFORM: The platform on which the upgrade should occur. Available:
 #             - `ubuntu`
-#             - `centos`
 #             - `rocky`
 #             Default: `ubuntu`
 set -e
@@ -15,9 +14,9 @@ set -e
 platform=${1:-ubuntu}
 
 case "${platform}" in
-    ubuntu|centos|rocky)
+    ubuntu|rocky)
         ;;
-    *) echo "Invalid platform: '${platform}'. Must be 'ubuntu' or 'centos'"
+    *) echo "Invalid platform: '${platform}'. Must be 'ubuntu' or 'rocky'"
         exit 1
         ;;
 esac
