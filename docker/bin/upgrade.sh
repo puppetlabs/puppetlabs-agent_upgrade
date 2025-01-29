@@ -19,8 +19,8 @@ set -e
 
 cd "$(dirname "$0")/../.."
 platforms=${1:-ubuntu}
-before=${2:-1.10.14}
-after=${3:-6.2.0}
+before=${2:-7.34.0}
+after=${3:-8.10.0}
 for platform in ${platforms//,/ }
 do
     docker build --rm -f docker/$platform/Dockerfile . -t pa-dev:$platform \

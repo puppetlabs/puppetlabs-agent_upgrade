@@ -22,7 +22,7 @@
 # This specifies the versions that were used for upgrade.
 #
 # Arguments:
-# - before: The version to do upgrade FROM. Default: "1.10.14"
+# - before: The version to do upgrade FROM. Default: "7.34.0"
 
 FROM rockylinux/rockylinux:8
 
@@ -34,15 +34,11 @@ RUN  dnf update -y \
   && dnf install -y wget git \
   && dnf clean all
 
-ARG before=1.10.14
+ARG before=7.34.0
 LABEL before=${before}
 
-# Install proper FROM repo: puppet 6 or puppet 7.
-RUN if [[ ${before} == 6.* ]]; then \
-        echo Installing puppet6 repo; \
-        wget -O puppet6.rpm http://yum.puppet.com/puppet6-release-el-8.noarch.rpm && \
-        rpm -i puppet6.rpm; \
-    elif [[ ${before} == 7.* ]]; then \
+# Install proper FROM repo pupet 7
+RUN if [[ ${before} == 7.* ]]; then \
         echo Installing puppet7 repo; \
         wget -O puppet7.rpm http://yum.puppet.com/puppet7-release-el-8.noarch.rpm && \
         rpm -i puppet7.rpm; \
@@ -67,13 +63,14 @@ COPY metadata.json ./
 RUN /opt/puppetlabs/puppet/bin/puppet module install --modulepath $module_path --target-dir .. puppetlabs-stdlib
 RUN /opt/puppetlabs/puppet/bin/puppet module install --modulepath $module_path --target-dir .. puppetlabs-inifile
 RUN /opt/puppetlabs/puppet/bin/puppet module install --modulepath $module_path --target-dir .. puppetlabs-apt
+RUN /opt/puppetlabs/puppet/bin/puppet module install --modulepath $module_path --target-dir .. puppetlabs-facts
 
 # Installing dependencies from source. These versions should be within the range
-# of `dependencies` in metadata.json. `translate` is a dependency for inifile.
-#RUN git clone https://github.com/puppetlabs/puppetlabs-stdlib ../stdlib --branch 5.2.0
-#RUN git clone https://github.com/puppetlabs/puppetlabs-inifile ../inifile --branch 2.5.0
-#RUN git clone https://github.com/puppetlabs/puppetlabs-translate ../translate --branch 1.2.0
-#RUN git clone https://github.com/puppetlabs/puppetlabs-apt ../apt --branch 6.3.0
+# of `dependencies` in metadata.json.
+#RUN git clone https://github.com/puppetlabs/puppetlabs-stdlib ../stdlib --branch 9.7.0
+#RUN git clone https://github.com/puppetlabs/puppetlabs-inifile ../inifile --branch 6.2.0
+#RUN git clone https://github.com/puppetlabs/puppetlabs-apt ../apt --branch 10.0.1
+#RUN git clone https://github.com/puppetlabs/puppetlabs-facts ../facts --branch 1.7.0
 
 # Check that all dependencies are installed.
 RUN /opt/puppetlabs/puppet/bin/puppet module --modulepath $module_path list --tree
