@@ -108,6 +108,12 @@ class puppet_agent::osfamily::solaris {
           logoutput   => 'on_failure',
           refreshonly => true,
         }
+        ~> exec { 'puppet_agent add publisher to pkg':
+          command     => "pkg set-publisher -e -g ${pkgrepo_dir} ${publisher}",
+          path        => '/bin:/usr/bin:/sbin:/usr/sbin',
+          logoutput   => 'on_failure',
+          refreshonly => true,
+        }
         # Make sure the pkg publishers are all available.  Broken
         # publisher entries will stop the installation process.
         # This must happen before removing any packages.
