@@ -27,16 +27,6 @@ catch [System.Management.Automation.CommandNotFoundException] {
   }
 }
 
-function Test-PuppetInstalled {
-  $rootPath = 'HKLM:\SOFTWARE\Puppet Labs\Puppet'
-  try { 
-    if (Get-ItemProperty -Path $rootPath) { RETURN $true }
-  }
-  catch {
-    RETURN $false
-  }
-}
-
 function Test-PuppetInstalledVersion {
   $rootPath = 'HKLM:\SOFTWARE\Puppet Labs\Puppet'
 
@@ -83,7 +73,7 @@ if ($version) {
     }
 }
 else {
-    if (Test-PuppetInstalled) {
+    if (Test-PuppetInstalledVersion) {
       Write-Output "Version parameter not defined and agent detected. Nothing to do."
       Exit
     }
@@ -181,5 +171,5 @@ if($_noop -eq 'true') {
   DownloadPuppet
   InstallPuppet
   Cleanup
-  Write-Output "Puppet Agent installed on $env:COMPUTERNAME" 
+  Write-Output "Puppet Agent installed on $env:COMPUTERNAME"
 }
