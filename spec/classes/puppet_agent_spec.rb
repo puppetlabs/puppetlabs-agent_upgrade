@@ -279,6 +279,7 @@ describe 'puppet_agent' do
 
             it { is_expected.to compile.with_all_deps }
             it { expect { catalogue }.not_to raise_error }
+            it { is_expected.to contain_class('puppet-agent').with_package_version(version) }
           end
         end
 
