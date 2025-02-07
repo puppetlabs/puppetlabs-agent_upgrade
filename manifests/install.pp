@@ -67,7 +67,10 @@ class puppet_agent::install (
       $_install_options = $install_options
       if $puppet_agent::absolute_source {
         # absolute_source means we use dpkg on debian based platforms
-        $_package_version = 'present'
+        if ($package_version != 'present' and $package_version != 'latest') {
+          fail('When using $absolute_source on Debian, $package_version must be set to "present" or "latest"')
+        }
+        $_package_version = $package_version
         $_provider = 'dpkg'
         # The source package should have been downloaded by puppet_agent::prepare::package to the local_packages_dir
         $_source = "${puppet_agent::params::local_packages_dir}/${puppet_agent::prepare::package::package_file_name}"
