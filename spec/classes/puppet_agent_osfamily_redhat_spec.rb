@@ -151,7 +151,7 @@ SCRIPT
           is_expected.to contain_yumrepo('pc_repo')
             .with({
                     # We no longer expect the 'f' in fedora repos
-                    'baseurl'  => "http://yum.puppet.com/puppet5/#{urlbit.gsub('/f', '/')}/#{arch}",
+                    'baseurl'  => "https://yum-puppetcore.puppet.com/puppet5/#{urlbit.gsub('/f', '/')}/#{arch}",
                     'enabled'  => 'true',
                     'gpgcheck' => '1',
                     'gpgkey'   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppet\n  file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppet-20250406",
@@ -259,6 +259,24 @@ SCRIPT
 
           it {
             is_expected.to contain_yumrepo('pc_repo').with_skip_if_unavailable(true)
+          }
+        end
+        describe 'with credentials' do
+          let(:params) do
+            {
+              manage_repo: true,
+              package_version: package_version,
+              username: 'forge-key',
+              password: sensitive('open-sesame'),
+            }
+          end
+
+          it {
+            is_expected.to contain_yumrepo('pc_repo')
+              .with(
+                username: 'forge-key',
+                password: sensitive('open-sesame'),
+              )
           }
         end
       end

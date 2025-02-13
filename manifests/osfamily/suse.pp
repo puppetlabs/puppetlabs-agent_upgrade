@@ -137,12 +137,30 @@ fi
             # In Puppet Enterprise, agent packages are served by the same server
             # as the master, which can be using either a self signed CA, or an external CA.
             # Zypper has issues with validating a self signed CA, so for now disable ssl verification.
+            # don't leak credentials
+            $repo_username = getvar('puppet_agent::username')
+            $repo_password = unwrap(getvar('puppet_agent::password'))
+
+            if $repo_username and $repo_password {
+              # lint:ignore:strict_indent
+              file { '/etc/zypp/credentials.d/PuppetcoreCreds':
+                ensure  => file,
+                owner   => 0,
+                group   => 0,
+                mode    => '0600',
+                content => Sensitive(@("EOT"))
+                  username=${repo_username}
+                  password=${repo_password}
+                  | EOT
+              }
+              # lint:endignore
+            }
             $repo_settings = {
               'name'        => $repo_name,
               'enabled'     => '1',
               'gpgcheck'    => '1',
               'autorefresh' => '0',
-              'baseurl'     => "${source}?ssl_verify=no",
+              'baseurl'     => "${source}?ssl_verify=no&auth=basic&credentials=PuppetcoreCreds",
               'type'        => 'rpm-md',
             }
 

@@ -24,33 +24,30 @@
 # Arguments:
 # - before: The version to do upgrade FROM. Default: "7.34.0"
 
-FROM rockylinux/rockylinux:8
+ARG BASE_IMAGE=registry.suse.com/suse/sle15:15.6
+FROM ${BASE_IMAGE}
 
 # Use this to force a cache reset (e.g. for output purposes)
 #COPY $0 /tmp/Dockerfile
 
 # Install some other dependencies for ease of life.
-RUN  dnf update -y \
-  && dnf install -y wget git \
-  && dnf clean all
+RUN zypper install --no-confirm wget git-core
 
 ARG before=7.34.0
 LABEL before=${before}
 
+ARG RELEASE_PACKAGE
+
 # Install proper FROM repo pupet 7
 RUN if [[ ${before} == 7.* ]]; then \
-        echo Installing puppet7 repo; \
-        wget -O puppet7.rpm http://yum.puppet.com/puppet7-release-el-8.noarch.rpm && \
-        rpm -i puppet7.rpm; \
+       wget -O puppet7.rpm ${RELEASE_PACKAGE} && \
+       rpm -i puppet7.rpm; \
     else echo no; \
     fi
 
-# Print out which versions of the puppet-agent package are available (for reference).
-#RUN dnf list puppet-agent --showduplicates
-
 # Install FROM version of puppet-agent.
-RUN dnf -y update && \
-    dnf install -y puppet-agent-${before}-1.el8
+RUN rpm --import https://yum.puppet.com/RPM-GPG-KEY-puppet-20250406 && \
+    zypper install --no-confirm --oldpackage --no-recommends --no-confirm puppet-agent-${before}
 
 # This is also duplicated in the docker/bin/helpers/run-upgrade.sh.
 ENV module_path=/tmp/modules
@@ -92,9 +89,6 @@ COPY lib/ ./lib/
 COPY manifests/ ./manifests/
 
 COPY docker/upgrade.pp /tmp/upgrade.pp
-
-# Print out which versions of the puppet-agent package are available (for reference).
-#RUN yum list puppet-agent --showduplicates
 
 # Perform the upgrade.
 ENTRYPOINT ["/tmp/bin/run-upgrade.sh"]
