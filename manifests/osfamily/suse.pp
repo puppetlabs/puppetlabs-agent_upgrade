@@ -134,9 +134,6 @@ fi
             # 'auto' versus X.Y.Z
             $_package_version = getvar('puppet_agent::master_or_package_version')
 
-            # In Puppet Enterprise, agent packages are served by the same server
-            # as the master, which can be using either a self signed CA, or an external CA.
-            # Zypper has issues with validating a self signed CA, so for now disable ssl verification.
             # don't leak credentials
             $repo_username = getvar('puppet_agent::username')
             $repo_password = unwrap(getvar('puppet_agent::password'))
@@ -160,7 +157,7 @@ fi
               'enabled'     => '1',
               'gpgcheck'    => '1',
               'autorefresh' => '0',
-              'baseurl'     => "${source}?ssl_verify=no&auth=basic&credentials=PuppetcoreCreds",
+              'baseurl'     => "${source}?auth=basic&credentials=PuppetcoreCreds",
               'type'        => 'rpm-md',
             }
 

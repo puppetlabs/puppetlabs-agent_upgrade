@@ -151,7 +151,7 @@ SCRIPT
                   'enabled'     => '1',
                   'gpgcheck'    => '1',
                   'autorefresh' => '0',
-                  'baseurl'     => "https://yum-puppetcore.puppet.com/puppet6/sles/#{os_version}/x86_64?ssl_verify=no&auth=basic&credentials=PuppetcoreCreds",
+                  'baseurl'     => "https://yum-puppetcore.puppet.com/puppet6/sles/#{os_version}/x86_64?auth=basic&credentials=PuppetcoreCreds",
                   'type'        => 'rpm-md',
                 }.each do |setting, value|
                   it {
@@ -203,7 +203,7 @@ SCRIPT
                             'path' => '/etc/zypp/repos.d/pc_repo.repo',
                             'section' => 'pc_repo',
                             'setting' => 'baseurl',
-                            'value'   => "https://nightlies.puppet.com/yum/puppet6/sles/#{os_version}/x86_64?ssl_verify=no&auth=basic&credentials=PuppetcoreCreds",
+                            'value'   => "https://nightlies.puppet.com/yum/puppet6/sles/#{os_version}/x86_64?auth=basic&credentials=PuppetcoreCreds",
                           })
                 }
               end
@@ -291,7 +291,7 @@ SCRIPT
                   'enabled'     => '1',
                   'gpgcheck'    => '1',
                   'autorefresh' => '0',
-                  'baseurl'     => "https://master.example.vm:8140/packages/2000.0.0/sles-#{os_version}-x86_64?ssl_verify=no&auth=basic&credentials=PuppetcoreCreds",
+                  'baseurl'     => "https://master.example.vm:8140/packages/2000.0.0/sles-#{os_version}-x86_64?auth=basic&credentials=PuppetcoreCreds",
                   'type'        => 'rpm-md',
                 }.each do |setting, value|
                   it {
@@ -341,7 +341,7 @@ SCRIPT
                             'path'    => '/etc/zypp/repos.d/pc_repo.repo',
                             'section' => 'pc_repo',
                             'setting' => 'baseurl',
-                            'value'   => "https://fake-sles-source.com/packages/2000.0.0/sles-#{os_version}-x86_64?ssl_verify=no&auth=basic&credentials=PuppetcoreCreds",
+                            'value'   => "https://fake-sles-source.com/packages/2000.0.0/sles-#{os_version}-x86_64?auth=basic&credentials=PuppetcoreCreds",
                           })
                 }
               end
