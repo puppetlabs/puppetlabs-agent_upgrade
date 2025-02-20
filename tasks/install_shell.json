@@ -43,6 +43,14 @@
       "description": "The number of retries in case of network connectivity failures",
       "type": "Optional[Integer]",
       "default": 5
+    },
+    "username": {
+      "description": "The username to use when downloading from a source location requiring authentication",
+      "type": "Optional[String]"
+    },
+    "password": {
+      "description": "The password to use when downloading from a source location requiring authentication",
+      "type": "Optional[String]"
     }
   },
   "files": ["facts/tasks/bash.sh"],

@@ -175,6 +175,14 @@ fi
         sslclientcert       => $_sslclientcert_path,
         sslclientkey        => $_sslclientkey_path,
         skip_if_unavailable => $puppet_agent::skip_if_unavailable,
+        username            => $puppet_agent::username,
+        password            => $puppet_agent::password,
+      }
+      file { '/etc/yum.repos.d/pc_repo.repo':
+        ensure => file,
+        owner  => 0,
+        group  => 0,
+        mode   => '0600',
       }
     }
   }

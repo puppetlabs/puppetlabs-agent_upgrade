@@ -5,11 +5,11 @@ RUN  dnf update -y \
   && dnf install -y wget git \
   && dnf clean all
 
-# Install several repos: puppet 6, and puppet7.
-RUN wget -O puppet6.rpm http://yum.puppet.com/puppet6-release-el-8.noarch.rpm && \
-    rpm -i puppet6.rpm --force --replacefiles --nodeps && \
-    wget -O puppet7.rpm http://yum.puppet.com/puppet7-release-el-8.noarch.rpm && \
-    rpm -i puppet7.rpm --force --replacefiles --nodeps
+# Install several repos: puppet 7 and 8
+RUN wget -O puppet7.rpm http://yum.puppet.com/puppet7-release-el-8.noarch.rpm && \
+    rpm -i puppet7.rpm --force --replacefiles --nodeps && \
+    wget -O puppet8.rpm http://yum.puppet.com/puppet8-release-el-8.noarch.rpm && \
+    rpm -i puppet8.rpm --force --replacefiles --nodeps
 
 # Print out available package versions for puppet-agent. If a specific version
 # is desired, pass that in with e.g. `--build-arg before=1.1.1`

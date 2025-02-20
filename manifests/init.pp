@@ -34,8 +34,8 @@
 #   The exact location of the package to install. The entire path to the package must be
 #   provided with this parameter.
 # @param yum_source
-#   Base URL of the location of mirrors of yum.puppet.com downloads sites. Directories under
-#   the URL "yum_source" should match the structure of the yum.puppet.com
+#   Base URL of the location of mirrors of yum-puppetcore.puppet.com downloads sites. Directories under
+#   the URL "yum_source" should match the structure of the yum-puppetcore.puppet.com
 # @param apt_source
 #   Base URL of the location of mirrors of apt.puppet.com downloads sites. Directories under
 #   the URL "apt_source" should match the structure of the apt.puppet.com
@@ -103,6 +103,8 @@
 # @param skip_if_unavailable
 #    For yum-based repositories, set the skip_if_unavailable option of the `yumrepo` type.
 # @param disable_proxy
+# @param username The username to use when downloading from a source location requiring authentication.
+# @param password The password to use when downloading from a source location requiring authentication.
 class puppet_agent (
   String                         $arch                    = $facts['os']['architecture'],
   String                         $collection              = $puppet_agent::params::collection,
@@ -114,7 +116,7 @@ class puppet_agent (
   Array                          $service_names           = $puppet_agent::params::service_names,
   Optional                       $source                  = undef,
   Optional                       $absolute_source         = undef,
-  String                         $yum_source              = 'http://yum.puppet.com',
+  String                         $yum_source              = 'https://yum-puppetcore.puppet.com',
   String                         $apt_source              = 'https://apt.puppet.com',
   String                         $mac_source              = 'https://downloads.puppet.com',
   String                         $windows_source          = 'https://downloads.puppet.com',
@@ -131,7 +133,9 @@ class puppet_agent (
   Optional                       $wait_for_pxp_agent_exit = undef,
   Optional                       $wait_for_puppet_run     = undef,
   Array[Puppet_agent::Config]    $config                  = [],
-  Stdlib::Absolutepath           $version_file_path       = '/opt/puppetlabs/puppet/VERSION'
+  Stdlib::Absolutepath           $version_file_path       = '/opt/puppetlabs/puppet/VERSION',
+  Optional                       $username                = undef,
+  Optional[Sensitive]            $password                = undef,
 ) inherits puppet_agent::params {
   # The configure class uses $puppet_agent::config to manage settings in
   # puppet.conf, and will always be present. It does not require management of

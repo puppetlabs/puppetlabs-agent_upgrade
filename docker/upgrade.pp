@@ -8,5 +8,7 @@ node default {
     # process.
     service_names   => [],
     collection      => $facts['to_collection'],
+    username        => $facts['forge_username'],
+    password        => Sensitive($facts['forge_password']),
   }
 }
